@@ -157,7 +157,7 @@ def source(self):
     return source
 
 def get_readable_message():
-    msg = '<b>Powered by BEN™</b>\n\n'
+    msg = '<b>___《 <a href='https://t.me/NUMBER03ANURAG'>⋆⋆  🎀 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ 🎀  ⋆⋆</a> 》___</b>\n\n'
     button = None
     tasks = len(download_dict)
     currentTime = get_readable_time(time() - botStartTime)
@@ -174,8 +174,8 @@ def get_readable_message():
         msg += f"by {source(download)}\n\n"
         msg += f"<b>{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
-            msg += f"\n<b>⌬</b> <a href='https://t.me/NUMBER03ANURAG'>{get_progress_bar_string(download.progress())}</a> {download.progress()}"
-            msg += f"\n<b>⌬ Processed</b>: {download.processed_bytes()} of {download.size()}"
+            msg += f"\n<b>⌬ Processed</b>: {escape(f'{download.name()}')}\n"
+            msg += f" {download.processed_bytes()} of {download.size()}"
             msg += f"\n<b>⌬ Speed</b>: {download.speed()} | <b>ETA</b>: {download.eta()}"
             msg += f'\n<b>⌬ Estimated</b>: {download.eta()}'
             if hasattr(download, 'seeders_num'):
