@@ -174,10 +174,10 @@ def get_readable_message():
         msg += f"by {source(download)}\n\n"
         msg += f"<b>{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
-            msg += f"\n{get_progress_bar_string(download.progress())} {download.progress()}"
-            msg += f"\n{download.processed_bytes()} of {download.size()}"
-            msg += f"\nSpeed: {download.speed()}"
-            msg += f'\nEstimated: {download.eta()}'
+            msg += f"\n<b>⌬</b> <a href='https://t.me/NUMBER03ANURAG'>{get_progress_bar_string(download.progress())}</a> {download.progress()}"
+            msg += f"\n<b>⌬ Processed</b>: {download.processed_bytes()} of {download.size()}"
+            msg += f"\n<b>⌬ Speed</b>: {download.speed()} | <b>ETA</b>: {download.eta()}"
+            msg += f'\n<b>⌬ Estimated</b>: {download.eta()}'
             if hasattr(download, 'seeders_num'):
                 try:
                     msg += f"\nSeeders: {download.seeders_num()} | Leechers: {download.leechers_num()}"
