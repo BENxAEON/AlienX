@@ -145,8 +145,8 @@ def get_progress_bar_string(pct):
         pct = float(pct.strip('%'))
     p = min(max(pct, 0), 100)
     cFull = int(p // 10)
-    p_str = '🚀' * cFull
-    p_str += '♻️' * (10 - cFull)
+    p_str = '◈' * cFull
+    p_str += '◇' * (10 - cFull)
     return p_str
     
 def source(self):
@@ -157,7 +157,7 @@ def source(self):
     return source
 
 def get_readable_message():
-    msg = '<b>Powered by __《 ⋆⋆  🎀 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ 🎀  ⋆⋆ 》__</b>\n\n'
+    msg = '<b>Powered by _《 ⋆⋆ 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ ⋆⋆ 》_</b>\n\n'
     button = None
     tasks = len(download_dict)
     currentTime = get_readable_time(time() - botStartTime)
