@@ -134,7 +134,7 @@ def gofile(url):
     details["header"] = ' '.join(f'{key}: {value}' for key, value in headers.items())
 
     def __fetch_links(_id, folderPath=''):
-        _url = f"https://api.gofile.io/getContent?contentId={_id}&token={token}&websiteToken=7fd94ds12fds4&cache=true"
+        _url = f"https://api.gofile.io/getContent?contentId={_id}&token={token}&wt=4fd6sg89d7s6=true"
         if _password:
             _url += f"&password={_password}"
         try:
