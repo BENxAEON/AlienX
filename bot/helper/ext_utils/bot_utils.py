@@ -170,14 +170,13 @@ def get_readable_message():
         globals()['STATUS_START'] = STATUS_LIMIT * (PAGES - 1)
         globals()['PAGE_NO'] = PAGES
     for download in list(download_dict.values())[STATUS_START:STATUS_LIMIT+STATUS_START]:
-        msg +=  f"\n<b>⌬ name</b>: {escape(f'{download.name()}')}\n"
+        msg +=  f"\n<b>⌬ {escape(f'{download.name()}')}</b>\n"
         msg += f"by {source(download)}\n\n"
         msg += f"<b>{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
             msg += f"\n<b>⌬ {get_progress_bar_string(download.progress())} {download.progress()}"
             msg += f" {download.processed_bytes()} of {download.size()}"
             msg += f"\n<b>⌬ Speed</b>: {download.speed()} | <b>ETA</b>: {download.eta()}"
-            msg += f'\n<b>⌬ Estimated</b>: {download.eta()}'
             if hasattr(download, 'seeders_num'):
                 try:
                     msg += f"\nSeeders: {download.seeders_num()} | Leechers: {download.leechers_num()}"
@@ -191,9 +190,9 @@ def get_readable_message():
             msg += f"\nTime: {download.seeding_time()}"
         else:
             msg += f"\nSize: {download.size()}"
-        msg += f"\nElapsed: {get_readable_time(time() - download.message.date.timestamp())}"
-        msg += f"\nMode: {download.upload_details['mode']}"
-        msg += f"\n/{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
+        msg += f"\n<b>Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())}"
+        msg += f"\n<b>Mode:</b> {download.upload_details['mode']}"
+        msg += f"\n /{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
     if len(msg) == 0:
         return None, None
     dl_speed = 0
@@ -224,7 +223,7 @@ def get_readable_message():
         buttons.ibutton(f"{PAGE_NO}/{PAGES}", "status ref")
         buttons.ibutton("Next", "status nex")
         button = buttons.build_menu(3)
-    msg += f"<b>⭐ Tasks</b>: {tasks}{bmax_task} <b>| UpTime:</b> {currentTime} <b>| Free :</b> {get_readable_file_size(disk_usage('/usr/src/app/downloads/').free)}"
+    msg += f"<b>🤖 Tasks</b>: {tasks}{bmax_task} <b>| UpTime:</b> {currentTime} <b>| Free :</b> {get_readable_file_size(disk_usage('/usr/src/app/downloads/').free)}"
 
     return msg, button
 
