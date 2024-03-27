@@ -157,7 +157,7 @@ def source(self):
     return source
 
 def get_readable_message():
-    msg = '<b><a href="https://t.me/NUMBER03ANURAG">Powered by《 ⋆⋆ 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ ⋆⋆ </a></b>\n\n'
+    msg = '<b><a href="https://t.me/NUMBER03ANURAG">Powered by《 ⋆⋆ 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ ⋆⋆ </a></b>\n'
     button = None
     tasks = len(download_dict)
     currentTime = get_readable_time(time() - botStartTime)
@@ -170,15 +170,16 @@ def get_readable_message():
         globals()['STATUS_START'] = STATUS_LIMIT * (PAGES - 1)
         globals()['PAGE_NO'] = PAGES
     for download in list(download_dict.values())[STATUS_START:STATUS_LIMIT+STATUS_START]:
-        msg +=  f"\n<b>⌬ {escape(f'{download.name()}')}</b>\n\n"
+        msg +=  f"\n<b>⌬ {escape(f'{download.name()}')}</b>\n"
+        msg +=  f"By <b><a href="">{source(download)}</a></b>\n\n"
         msg += f"<b>{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
-            msg += f"\n<b>⌬ {get_progress_bar_string(download.progress())} {download.progress()}"
+            msg += f"\n<b>⌬ {get_progress_bar_string(download.progress())} {download.progress()}</b>"
             msg += f" {download.processed_bytes()} of {download.size()}"
             msg += f"\n<b>⌬ Speed</b>: {download.speed()} | <b>ETA</b>: {download.eta()}"
             if hasattr(download, 'seeders_num'):
                 try:
-                    msg += f"\nSeeders: {download.seeders_num()} | Leechers: {download.leechers_num()}"
+                    msg += f"<b>\n⌬ Seeders:</b> {download.seeders_num()} <b>| Leechers:</b> {download.leechers_num()}"
                 except:
                     pass
         elif download.status() == MirrorStatus.STATUS_SEEDING:
@@ -189,7 +190,7 @@ def get_readable_message():
             msg += f"\nTime: {download.seeding_time()}"
         else:
             msg += f"\nSize: {download.size()}"
-        msg += f"\n<b>⌬ Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())} <b>| User:</b> {source(download)}"
+        msg += f"\n<b>⌬ Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())}"
         msg += f"\n<b>⌬ Mode:</b> {download.upload_details['mode']}"
         msg += f"\n🦿/{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
     if len(msg) == 0:
