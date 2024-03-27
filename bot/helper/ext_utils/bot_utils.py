@@ -170,9 +170,9 @@ def get_readable_message():
         globals()['STATUS_START'] = STATUS_LIMIT * (PAGES - 1)
         globals()['PAGE_NO'] = PAGES
     for download in list(download_dict.values())[STATUS_START:STATUS_LIMIT+STATUS_START]:
-        msg += f"\n<b>⌬ Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())} <b>| User:</b> {source(download)}"
-        
-        msg += f"<b>{download.status()}...</b>"
+        msg += f"<b>⌬ {escape(f'{download.name()}')}</b>\n"
+        msg += f"\n<b>⌬ User:</b> {source(download)}"
+        msg += f"\n\n<b>{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
             msg += f"\n<b>⌬ {get_progress_bar_string(download.progress())} {download.progress()}</b>"
             msg += f" {download.processed_bytes()} of {download.size()}"
