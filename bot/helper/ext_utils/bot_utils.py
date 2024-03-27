@@ -192,7 +192,7 @@ def get_readable_message():
             msg += f"\nSize: {download.size()}"
         msg += f"\n<b>⌬ Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())}"
         msg += f"\n<b>⌬ Mode:</b> {download.upload_details['mode']}"
-        msg += f"\n🦿/{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
+        msg += f"\n🎯/{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
     if len(msg) == 0:
         return None, None
     dl_speed = 0
