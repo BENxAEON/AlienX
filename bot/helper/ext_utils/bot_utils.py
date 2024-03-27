@@ -157,7 +157,7 @@ def source(self):
     return source
 
 def get_readable_message():
-    msg = '<b>Powered by _《 ⋆⋆ 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ ⋆⋆ 》_</b>\n\n'
+    msg = '<b><a href="https://t.me/NUMBER03ANURAG">Powered by《 ⋆⋆ 𝔹𝔼ℕ 𝕩 𝕃𝔼𝔼ℂℍ ⋆⋆ </a></b>\n\n'
     button = None
     tasks = len(download_dict)
     currentTime = get_readable_time(time() - botStartTime)
