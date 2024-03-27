@@ -170,8 +170,7 @@ def get_readable_message():
         globals()['STATUS_START'] = STATUS_LIMIT * (PAGES - 1)
         globals()['PAGE_NO'] = PAGES
     for download in list(download_dict.values())[STATUS_START:STATUS_LIMIT+STATUS_START]:
-        msg +=  f"\n<b>⌬ {escape(f'{download.name()}')}</b>\n"
-        msg +=  f"By <b><a href="">{source(download)}</a></b>\n\n"
+        
         msg += f"<b>{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
             msg += f"\n<b>⌬ {get_progress_bar_string(download.progress())} {download.progress()}</b>"
@@ -189,7 +188,7 @@ def get_readable_message():
             msg += f"\nRatio: {download.ratio()}"
             msg += f"\nTime: {download.seeding_time()}"
         else:
-            msg += f"\nSize: {download.size()}"
+            msg msg += f"\n<b>⌬ Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())} <b>| User:</b> {source(download)}"+= f"\nSize: {download.size()}"
         msg += f"\n<b>⌬ Elapsed:</b> {get_readable_time(time() - download.message.date.timestamp())}"
         msg += f"\n<b>⌬ Mode:</b> {download.upload_details['mode']}"
         msg += f"\n🦿/{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
