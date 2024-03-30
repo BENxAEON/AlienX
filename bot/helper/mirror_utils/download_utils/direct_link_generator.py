@@ -16,8 +16,6 @@ from base64 import b64decode
 from bot import config_dict
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException
 from bot.helper.ext_utils.help_messages import PASSWORD_ERROR_MESSAGE
-from bot.helper.ext_utils.links_utils import is_share_link
-from bot.helper.ext_utils.status_utils import speed_string_to_bytes
 
 _caches = {}
 user_agent = (
