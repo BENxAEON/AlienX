@@ -94,99 +94,207 @@ def direct_link_generator(link: str):
 
 
 def gofile(url):
+
     try:
+
         if "::" in url:
+
             _password = url.split("::")[-1]
+
             _password = sha256(_password.encode("utf-8")).hexdigest()
+
             url = url.split("::")[-2]
+
         else:
-            _password = ''
+
+            _password = ""
+
         _id = url.split("/")[-1]
+
     except Exception as e:
+
         raise DirectDownloadLinkException(f"ERROR: {e.__class__.__name__}")
 
-    session = Session()
 
-    def __get_token():
-        if 'gofile_token' in _caches:
-            __url = f"https://api.gofile.io/getAccountDetails?token={_caches['gofile_token']}"
-        else:
-            __url = 'https://api.gofile.io/createAccount'
+
+    def __get_token(session):
+
+        headers = {
+
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36",
+
+            "Accept-Encoding": "gzip, deflate, br",
+
+            "Accept": "*/*",
+
+            "Connection": "keep-alive",
+
+        }
+
+        __url = f"https://api.gofile.io/accounts"
+
         try:
-            __res = session.get(__url, verify=False).json()
-            if __res["status"] != 'ok':
-                if 'gofile_token' in _caches:
-                    del _caches['gofile_token']
-                return __get_token()
-            _caches['gofile_token'] = __res["data"]["token"]
-            return _caches['gofile_token']
+
+            __res = session.post(__url, headers=headers).json()
+
+            if __res["status"] != "ok":
+
+                raise DirectDownloadLinkException(f"ERROR: Failed to get token.")
+
+            return __res["data"]["token"]
+
         except Exception as e:
-            raise DirectDownloadLinkException(f"ERROR: {e.__class__.__name__}")
 
-    try:
-        token = __get_token()
-    except Exception as e:
-        session.close()
-        raise DirectDownloadLinkException(e)
+            raise e
 
-    details = {'contents':[], 'title': '', 'total_size': 0}
-    headers = {"Cookie": f"accountToken={token}"}
-    details["header"] = ' '.join(f'{key}: {value}' for key, value in headers.items())
 
-    def __fetch_links(_id, folderPath=''):
-        _url = f"https://api.gofile.io/getContent?contentId={_id}&token={token}&wt=4fd6sg89d7s6=true"
+
+    def __fetch_links(session, _id, folderPath=""):
+
+        _url = f"https://api.gofile.io/contents/{_id}?wt=4fd6sg89d7s6&cache=true"
+
+        headers = {
+
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36",
+
+            "Accept-Encoding": "gzip, deflate, br",
+
+            "Accept": "*/*",
+
+            "Connection": "keep-alive",
+
+            "Authorization": "Bearer" + " " + token,
+
+        }
+
         if _password:
+
             _url += f"&password={_password}"
+
         try:
-            _json = session.get(_url, verify=False).json()
+
+            _json = session.get(_url, headers=headers).json()
+
         except Exception as e:
+
             raise DirectDownloadLinkException(f"ERROR: {e.__class__.__name__}")
-        if _json['status'] in 'error-passwordRequired':
-            raise DirectDownloadLinkException(f'ERROR: This link requires a password!\n\n<b>This link requires a password!</b>\n- Insert sign <b>::</b> after the link and write the password after the sign.\n\n<b>Example:</b> {url}::love you\n\n* No spaces between the signs <b>::</b>\n* For the password, you can use a space!')
-        if _json['status'] in 'error-passwordWrong':
-            raise DirectDownloadLinkException('ERROR: This password is wrong !')
-        if _json['status'] in 'error-notFound':
-            raise DirectDownloadLinkException("ERROR: File not found on gofile's server")
-        if _json['status'] in 'error-notPublic':
+
+        if _json["status"] in "error-passwordRequired":
+
+            raise DirectDownloadLinkException(
+
+                f"ERROR:\n{PASSWORD_ERROR_MESSAGE.format(url)}"
+
+            )
+
+        if _json["status"] in "error-passwordWrong":
+
+            raise DirectDownloadLinkException("ERROR: This password is wrong !")
+
+        if _json["status"] in "error-notFound":
+
+            raise DirectDownloadLinkException(
+
+                "ERROR: File not found on gofile's server"
+
+            )
+
+        if _json["status"] in "error-notPublic":
+
             raise DirectDownloadLinkException("ERROR: This folder is not public")
+
+
 
         data = _json["data"]
 
-        if not details['title']:
-            details['title'] = data['name'] if data['type'] == "folder" else _id
 
-        contents = data["contents"]
+
+        if not details["title"]:
+
+            details["title"] = data["name"] if data["type"] == "folder" else _id
+
+
+
+        contents = data["children"]
+
         for content in contents.values():
-            if content["type"] == "folder":
-                if not content['public']:
-                    continue
-                if not folderPath:
-                    newFolderPath = path.join(details['title'], content["name"])
-                else:
-                    newFolderPath = path.join(folderPath, content["name"])
-                __fetch_links(content["id"], newFolderPath)
-            else:
-                if not folderPath:
-                    folderPath = details['title']
-                item = {
-                    "path": path.join(folderPath),
-                    "filename": content["name"],
-                    "url": content["link"],
-                }
-                if 'size' in content:
-                    size = content["size"]
-                    if isinstance(size, str) and size.isdigit():
-                        size = float(size)
-                    details['total_size'] += size
-                details['contents'].append(item)
 
-    try:
-        __fetch_links(_id)
-    except Exception as e:
-        session.close()
-        raise DirectDownloadLinkException(e)
-    session.close()
+            if content["type"] == "folder":
+
+                if not content["public"]:
+
+                    continue
+
+                if not folderPath:
+
+                    newFolderPath = path.join(details["title"], content["name"])
+
+                else:
+
+                    newFolderPath = path.join(folderPath, content["name"])
+
+                __fetch_links(session, content["id"], newFolderPath)
+
+            else:
+
+                if not folderPath:
+
+                    folderPath = details["title"]
+
+                item = {
+
+                    "path": path.join(folderPath),
+
+                    "filename": content["name"],
+
+                    "url": content["link"],
+
+                }
+
+                if "size" in content:
+
+                    size = content["size"]
+
+                    if isinstance(size, str) and size.isdigit():
+
+                        size = float(size)
+
+                    details["total_size"] += size
+
+                details["contents"].append(item)
+
+
+
+    details = {"contents": [], "title": "", "total_size": 0}
+
+    with Session() as session:
+
+        try:
+
+            token = __get_token(session)
+
+        except Exception as e:
+
+            raise DirectDownloadLinkException(f"ERROR: {e.__class__.__name__}")
+
+        details["header"] = f"Cookie: accountToken={token}"
+
+        try:
+
+            __fetch_links(session, _id)
+
+        except Exception as e:
+
+            raise DirectDownloadLinkException(e)
+
+
+
+    if len(details["contents"]) == 1:
+
+        return (details["contents"][0]["url"], details["header"])
+
     return details
+
 
 
 def nURL_resolver(url: str):
