@@ -46,24 +46,24 @@ bool_vars = ['AS_DOCUMENT', 'BOT_PM', 'STOP_DUPLICATE', 'SET_COMMANDS', 'SHOW_ME
 
 async def load_config():
 
-    BOT_TOKEN = environ.get('BOT_TOKEN', '')
+    BOT_TOKEN = environ.get('BOT_TOKEN', '6783936031:AAE7WXr_lNPRI5OMhnpHU3APVYLV6xLnSOY')
     if len(BOT_TOKEN) == 0:
         BOT_TOKEN = config_dict['BOT_TOKEN']
 
-    TELEGRAM_API = environ.get('TELEGRAM_API', '')
+    TELEGRAM_API = environ.get('TELEGRAM_API', '29177249')
     if len(TELEGRAM_API) == 0:
         TELEGRAM_API = config_dict['TELEGRAM_API']
     else:
         TELEGRAM_API = int(TELEGRAM_API)
 
-    TELEGRAM_HASH = environ.get('TELEGRAM_HASH', '')
+    TELEGRAM_HASH = environ.get('TELEGRAM_HASH', 'f1c8d021f35a8a0391325bda480e30ad')
     if len(TELEGRAM_HASH) == 0:
         TELEGRAM_HASH = config_dict['TELEGRAM_HASH']
 
     BOT_MAX_TASKS = environ.get('BOT_MAX_TASKS', '')
     BOT_MAX_TASKS = int(BOT_MAX_TASKS) if BOT_MAX_TASKS.isdigit() else ''
     
-    OWNER_ID = environ.get('OWNER_ID', '')
+    OWNER_ID = environ.get('OWNER_ID', '5606087670')
     OWNER_ID = config_dict['OWNER_ID'] if len(OWNER_ID) == 0 else int(OWNER_ID)
 
     USER_TD_SA = environ.get('USER_TD_SA', '')
@@ -74,7 +74,7 @@ async def load_config():
     if len(GDTOT_CRYPT) == 0:
         GDTOT_CRYPT = ''
     
-    DATABASE_URL = environ.get('DATABASE_URL', '')
+    DATABASE_URL = environ.get('DATABASE_URL', 'mongodb+srv://benx10:ANUben10@ben10.1anjvyl.mongodb.net/?retryWrites=true&w=majority')
     if len(DATABASE_URL) == 0:
         DATABASE_URL = ''
 
